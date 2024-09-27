@@ -16,6 +16,9 @@ jobs:
       pull-requests: read
 
     steps:
+      - name: Check GitHub token permissions
+        run: |
+          curl -H "Authorization: token ${{ secrets.GH_TOKEN }}" https://api.github.com/repos/github/sponsors
       - name: Get dates for last month
         shell: bash
         run: |
@@ -33,8 +36,7 @@ jobs:
         uses: github/issue-metrics@v3
         env:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
-          SEARCH_QUERY: 'repo:github/sponsors repo:andimiya/plant-app-next is:issue created:${{ env.last_month }}'
-
+          SEARCH_QUERY: 'repo:github/sponsors is:issue created:${{ env.last_month }}'
       - name: Create issue
         uses: peter-evans/create-issue-from-file@v4
         with:
